@@ -1,4 +1,4 @@
-name: Build and Push DTR Docker Image
+name: Build and Push SGI Booking Docker Image
 
 on:
   push:
@@ -30,7 +30,7 @@ jobs:
         uses: docker/metadata-action@v5
         with:
           images: |
-            ${{ secrets.DOCKERHUB_USERNAME }}/dtr-django
+            ${{ secrets.DOCKERHUB_USERNAME }}/sgi-booking
           tags: |
             type=semver,pattern={{version}}
             type=raw,value=stable,enable=${{ startsWith(github.ref, 'refs/tags/v') }}
