@@ -17,7 +17,7 @@
                 Check In
             </a>
         </div>
-
+TEST
         <!-- Right Section -->
         <div class="flex justify-center">
             <img src="{{ asset('images/southgate2.svg') }}" class="rounded-xl drop-shadow-xl max-w-full h-auto">
