@@ -1,0 +1,509 @@
+$(document).ready(function() {
+    // Set up CSRF token for AJAX requests
+    $.ajaxSetup({
+        headers: {
+            'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
+        }
+    });
+
+
+
+
+    // EDIT
+    $(".default_datatable1").on("click", "tbody .btn_table_modal_edit", function () {
+        var data_table_modal_id = $(this).attr('data-id');
+        console.log("Data ID being sent:", data_table_modal_id);
+    
+        $.ajax({
+            type: 'POST',
+            url: '/EditModal',
+            data: { data_table_modal_id: data_table_modal_id },
+            dataType: 'json',
+            success: function (data) {
+                console.log("AJAX Response:", data); // Log the response
+                if (data.success) {
+                    $(".id_edit").val(data.id);
+                    $(".edit_Cfirstname").val(data.firstname);
+                    $(".edit_Clastname").val(data.lastname);
+                    $("#EditData-modal").removeClass('hidden').addClass('flex');
+                } else {
+                    Swal.fire({
+                        icon: 'warning',
+                        title: 'No Data',
+                        text: 'No records found!'
+                    });
+                }
+            },
+            error: function (xhr, errmsg, err) {
+                console.error("Error response:", xhr.responseText);
+                Swal.fire({
+                    icon: 'error',
+                    title: 'Oops...',
+                    text: 'Something went wrong!'
+                });
+            }
+        });
+    });
+    
+
+
+
+    
+    // Event listener for closing the modal
+    $('[data-modal-hide]').on('click', function () {
+        var modalId = $(this).data('modal-hide');
+        $('#' + modalId).addClass('hidden').removeClass('flex');
+    });
+    
+
+    
+
+
+    // $('.update_modal').submit(function(event) {
+    //     event.preventDefault();
+    
+    //     let formData = new FormData(this);
+    
+    //     $.ajax({
+    //         type: 'POST',
+    //         url: 'updateTableModal', // Ensure the correct URL
+    //         data: formData,
+    //         processData: false,
+    //         contentType: false,
+    //         success: function(response) {
+    //             if (response.success) {
+    //                 Swal.fire({
+    //                     icon: 'success',
+    //                     title: 'Your changes have been saved successfully',
+    //                     confirmButtonColor: '#08655D',
+    //                     showConfirmButton: true,
+    //                     confirmButtonText: "Ok"
+    //                 }).then(function() {
+    //                     window.location.reload();
+    //                 });
+    //             } else {
+    //                 Swal.fire({
+    //                     icon: 'error',
+    //                     title: 'Oops...',
+    //                     text: response.error_message || 'Something went wrong!'
+    //                 });
+    //             }
+    //         },
+    //         error: function(xhr, errmsg, err) {
+    //             Swal.fire({
+    //                 icon: 'error',
+    //                 title: 'Oops...',
+    //                 text: 'Something went wrong!'
+    //             });
+    //         }
+    //     });
+    // });
+    
+
+
+    
+
+
+    
+    // Event listener for closing the modal
+    $('[data-modal-hide]').on('click', function () {
+        var modalId = $(this).data('modal-hide');
+        $('#' + modalId).addClass('hidden').removeClass('flex');
+    });
+
+
+
+
+    $(".default_datatable_roomList").on("click", "tbody .btn_table_modal_edit", function () {
+        var data_table_modal_id = $(this).attr('data-id');
+        $.ajax({
+            type: 'POST',
+            url: '/EditRoom',
+            data: { data_table_modal_id: data_table_modal_id },
+            dataType: 'json',
+            success: function (data) {
+                // console.log("AJAX Response:", data);
+                if (data.success) {
+                    $(".id_edit_room").val(data.id);
+                    $(".edit_room_number").val(data.room_number);
+                    $(".edit_rate_type").val(data.rate_type);
+                    $(".edit_adult_rate").val(data.adult_rate);
+                    $(".edit_children_rate").val(data.children_rate);
+                    $(".edit_room_type").empty();
+                    $(".edit_room_status").empty();
+
+                    data.room_types.forEach(function (roomType) {
+                        $(".edit_room_type").append(
+                            $("<option>").val(roomType.room_type_id).text(roomType.room_type)
+                        );
+                    });
+    
+                    data.statuses.forEach(function (roomStatus) {
+                        $(".edit_room_status").append(
+                            $("<option>").val(roomStatus.status_id).text(roomStatus.status)
+                        );
+                    });
+             
+                    $(".edit_room_type").val(data.room_type_id);
+                    $(".edit_room_status").val(data.status_id);
+                    $("#EditRoom-modal").removeClass('hidden').addClass('flex');
+                } else {
+                    Swal.fire({
+                        icon: 'warning',
+                        title: 'No Data',
+                        text: 'No records found!'
+                    });
+                }
+            },
+            error: function (xhr, errmsg, err) {
+                console.error("Error response:", xhr.responseText);
+                Swal.fire({
+                    icon: 'error',
+                    title: 'Oops...',
+                    text: 'Something went wrong!'
+                });
+            }
+        });
+    });
+    
+
+    
+
+
+
+
+
+
+
+
+
+
+
+// VIEW CHECKIN 
+
+$(".default_datatable_roomList").on("click", "tbody .btn_table_modal_view_checkin", function () {
+    var data_table_modal_id = $(this).attr('data-id');
+
+    $.ajax({
+        type: 'POST',
+        url: '/viewCheckinModal',  
+        data: {data_table_modal_id: data_table_modal_id},
+        dataType: 'json',
+   
+        success: function (data) {
+            if (data.success) {
+                $(".checkin_view_folio_number").val(data.folio_number);
+                $(".checkin_view_firstname").val(data.first_name);
+                $(".checkin_view_lastname").val(data.last_name);
+                $(".checkin_view_address").val(data.address);
+                $(".checkin_view_country").val(data.country);
+                $(".checkin_view_company").val(data.company);
+                $(".checkin_view_roomnum").val(data.room_number);
+                $(".checkin_view_datein").val(formatDate(data.date_in));
+                $(".checkin_view_no_of_days").val(data.no_of_days);
+                $(".checkin_view_no_of_adults").val(data.no_of_adults);
+                $(".checkin_view_no_of_children").val(data.no_of_children);
+                $(".checkin_view_business_source").val(data.business_source);
+                $(".checkin_view_date_out").val(formatDate(data.date_out));
+                $(".checkin_view_rate_period").val(data.rate_period);
+                $(".checkin_view_total_charges").val(data.total_charges);
+                $(".checkin_view_other_charges").val(data.other_charges);
+                $(".checkin_view_sub_total").val(data.sub_total);
+                $(".checkin_view_discount").val(data.discount_description);
+                $(".checkin_view_total").val(data.total);
+                $(".checkin_view_amount_paid").val(data.amount_paid);
+                $(".checkin_view_balance").val(data.balance);
+                $(".checkin_view_id_type").val(data.id_type);
+                $(".checkin_view_id_number").val(data.id_number);
+                $(".checkin_view_vehicle_model").val(data.vehicle_model);
+                $(".checkin_view_vehicle_plate_no").val(data.vehicle_plate_no);
+                $("#checkinView-modal").removeClass('hidden').addClass('flex');
+            
+
+            } else {
+                alert("error")
+            }
+        },
+        error: function (xhr, errmsg, err) {
+            alert("error")
+        }
+    });
+
+});
+
+function formatDate(dateStr) {
+    const options = { year: 'numeric', month: 'short', day: 'numeric' };
+    const date = new Date(dateStr);
+    return date.toLocaleDateString('en-US', options);
+}
+
+
+
+
+
+
+
+
+    // EDIT CHECK IN 
+    $(".default_datatable_roomList").on("click", "tbody .btn_table_modal_edit_checkin", function () {
+        var data_table_modal_id = $(this).attr("data-id");
+    
+        $.ajax({
+            type: "POST",
+            url: "/EditCheckIn",
+            data: { data_table_modal_id: data_table_modal_id },
+            dataType: "json",
+            success: function (data) {
+                // console.log("AJAX Response:", data);
+                if (data.success) {
+                    // Populate the fields
+                    $(".edit_checkin_folio_number").val(data.folio_number);
+                    $(".edit_checkin_firstname").val(data.first_name);
+                    $(".edit_checkin_lastname").val(data.last_name);
+                    $(".edit_checkin_address").val(data.address);
+                    $(".edit_checkin_datein").val(data.date_in);
+                    $(".edit_checkin_no_of_days").val(data.no_of_days);
+                    $(".edit_checkin_no_of_adults").val(data.no_of_adults);
+                    $(".edit_checkin_no_of_children").val(data.no_of_children);
+                    $(".edit_checkin_dateout").val(data.date_out);
+                    $(".edit_checkin_id_type").val(data.id_type);
+                    $(".edit_checkin_id_number").val(data.id_number);
+                    $(".edit_checkin_vehicle_model").val(data.vehicle_model);
+                    $(".edit_checkin_vehicle_plate_no").val(data.vehicle_plate_no);
+                    $(".edit_checkin_rate_period").val(data.rate_period);
+                    $(".edit_checkin_total_charges").val(data.total_charges);
+                    $(".edit_checkin_other_charges").val(data.other_charges);
+                    $(".edit_checkin_sub_total").val(data.sub_total);
+                    $(".edit_checkin_total").val(data.total);
+                    $(".edit_checkin_amount_paid").val(data.amount_paid);
+                    $(".edit_checkin_balance").val(data.balance);
+                    $(".edit_checkin_bank").val(data.bank);
+                    $(".edit_checkin_card_type").val(data.card_type);
+                    $(".edit_checkin_reference_num").val(data.reference_num);
+    
+                    // Populate dropdowns
+                    $(".edit_checkin_discount").empty();
+                    $(".edit_checkin_business_source_id").empty();
+                    $(".edit_checkin_country").empty();
+                    $(".edit_checkin_company").empty();
+                    $(".edit_checkin_room").empty();
+                    $("#editCheckIn-modal").removeClass("hidden").addClass("flex");
+
+
+              
+    
+                    data.countries.forEach(function (Country) {
+                        $(".edit_checkin_country").append(
+                            $("<option>").val(Country.country_id).text(Country.country)
+                        );
+                    });
+    
+                    data.companies.forEach(function (Company) {
+                        $(".edit_checkin_company").append(
+                            $("<option>").val(Company.company_id).text(Company.company)
+                        );
+                    });
+    
+                    data.rooms.forEach(function (Room) {
+                        $(".edit_checkin_room").append(
+                            $("<option>").val(Room.id).text(Room.room_number + " - " + Room.rate_type)
+                            .attr("data-room-rate",Room.room_rate)
+                            .attr("data-adult-rate",Room.adult_rate)
+                            .attr("data-children-rate",Room.children_rate)
+                        );
+                    });
+                
+    
+                    data.business.forEach(function (Business) {
+                        $(".edit_checkin_business_source_id").append(
+                            $("<option>").val(Business.business_source_id).text(Business.business_source)
+                        );
+                    });
+    
+                    data.discounts.forEach(function (Discount) {
+                        $(".edit_checkin_discount").append(
+                            $("<option>").val(Discount.charge_discount_id).text(Discount.discount_description + "-" + Discount.discount_num).attr("data-discount-num", Discount.discount_num)
+                        );
+                    });
+    
+                    $(".edit_checkin_discount").val(data.charge_discount_id);
+                    $(".edit_checkin_business_source_id").val(data.business_source_id);
+                    $(".edit_checkin_country").val(data.country_id);
+                    $(".edit_checkin_company").val(data.company_id);
+                    $(".edit_checkin_room").val(data.id);
+    
+             
+                    const noOfDaysInput = document.getElementById("edit_checkin_no_of_days");
+                    const ratePeriodInput = document.getElementById("edit_checkin_rate_period");
+                    const totalChargesInput = document.getElementById("edit_checkin_total_charges");
+                    const otherChargesInput = document.getElementById("edit_checkin_other_charges");
+                    const subTotalInput = document.getElementById("edit_checkin_sub_total");
+                    const discountInput = document.getElementById("edit_checkin_discount");
+                    const totalInput = document.getElementById("edit_checkin_total");
+                    const amountPaidInput = document.getElementById("edit_checkin_amount_paid");
+                    const balanceInput = document.getElementById("edit_checkin_balance");
+                    const roomInput = document.getElementById("edit_checkin_room");
+                    const adultRateInput = document.getElementById("edit_checkin_no_of_adults");
+                    const childrenRateInput = document.getElementById("edit_checkin_no_of_children");
+                    const quantityInputs = document.querySelectorAll('.qty-inputEdit');
+                    const totalAmountSpan = document.querySelector('.total-amountchargesEdit');
+
+                    function calculateInnerModalTotal() {
+                        let total = 0;
+                    
+                        // Loop through each quantity input
+                        quantityInputs.forEach((input) => {
+                            const price = parseFloat(input.getAttribute('data-price')) || 0;
+                            const quantity = parseInt(input.value) || 0;
+                    
+                            // Calculate total for the row and add to the overall total
+                            total += price * quantity;
+                        });
+                    
+                        // Update the TOTAL field in the modal
+                        totalAmountSpan.textContent = total.toFixed(2);
+                    }
+                    quantityInputs.forEach((input) => {
+                        input.addEventListener('input', calculateInnerModalTotal);
+                    });
+                    
+                    // Initial calculation when the modal opens
+                    calculateInnerModalTotal();
+
+                    
+        
+
+                    function calculateFields() {
+                  
+
+                        const noOfDays = parseInt(noOfDaysInput.value) || 0;
+                        const otherCharges = parseFloat(otherChargesInput.value) || 0;
+                        const amountPaid = parseFloat(amountPaidInput.value) || 0;
+               
+                        
+             
+                     
+                        const selectedOption = discountInput.options[discountInput.selectedIndex];
+                        const discounts_num = parseFloat(selectedOption?.getAttribute("data-discount-num")) || 0;
+                       
+                        const selectedOptionRoom = roomInput.options[roomInput.selectedIndex];
+                        const roomRate = parseFloat(selectedOptionRoom?.getAttribute("data-room-rate")) || 0;
+
+                        adultRate = parseFloat(selectedOptionRoom.getAttribute('data-adult-rate')) || 0;
+                        childrenRate = parseFloat(selectedOptionRoom.getAttribute('data-children-rate')) || 0;
+                        const adultRatefinal = parseInt(adultRateInput.value) || 0;
+                        const childrenRatefinal = parseInt(childrenRateInput.value) || 0;
+                  
+                        const totalCharges = adultRate * adultRatefinal + childrenRate * childrenRatefinal + noOfDays * roomRate;
+                        const subTotal = totalCharges + otherCharges;
+                        const discountedTotal = subTotal - (subTotal * discounts_num / 100);
+                        const balanceFinal = parseFloat((discountedTotal - amountPaid).toFixed(2));
+
+                        ratePeriodInput.value = roomRate.toFixed(2);
+                        totalChargesInput.value = totalCharges.toFixed(2);
+                        subTotalInput.value = subTotal.toFixed(2);
+                        totalInput.value = discountedTotal.toFixed(2);
+                        balanceInput.value = balanceFinal.toFixed(2);
+                    }
+
+                   
+                    adultRateInput.addEventListener("input", calculateFields);
+                    childrenRateInput.addEventListener("input", calculateFields);
+                    totalInput.addEventListener("input", calculateFields);
+                    noOfDaysInput.addEventListener("input", calculateFields);
+                    otherChargesInput.addEventListener("input", calculateFields);
+                    discountInput.addEventListener("input", calculateFields);
+                    amountPaidInput.addEventListener("input", calculateFields);
+                    roomInput.addEventListener("change", calculateFields);
+
+         
+                    calculateFields();
+
+                    
+                } else {
+                    Swal.fire({
+                        icon: "warning",
+                        title: "No Data",
+                        text: "No records found!",
+                    });
+                }
+            },
+            error: function (xhr, errmsg, err) {
+                console.error("Error response:", xhr.responseText);
+                Swal.fire({
+                    icon: "error",
+                    title: "Oops...",
+                    text: "Something went wrong!",
+                });
+            },
+        });
+    });
+    
+
+
+
+
+
+
+
+
+    $(".default_datatable_roomList").on("click", "tbody .btn_table_modal_delete_checkin", function () {
+        var folio_number = $(this).attr('data-id');
+        Swal.fire({
+            title: 'Are you sure?',
+            text: `You are about to delete this data. This action cannot be undone!`,
+            icon: 'warning',
+            showCancelButton: true,
+            confirmButtonColor: '#d33',
+            cancelButtonColor: '#3085d6',
+            confirmButtonText: 'Yes, delete it!',
+            cancelButtonText: 'Cancel'
+        }).then((result) => {
+            if (result.isConfirmed) {
+                $.ajax({
+                    type: 'POST',
+                    url: '/deleteCheckIn',
+                    data: {
+                        folio_number: folio_number,
+                        _token: $('meta[name="csrf-token"]').attr('content') // Include CSRF token
+                    },
+                    success: function(data) {
+                        if (data.success) {
+                            Swal.fire({
+                                icon: 'success',
+                                title: 'Deleted Successfully',
+                                confirmButtonColor: '#08655D',
+                                showConfirmButton: true,
+                                confirmButtonText: "Ok"
+                            }).then(function() {
+                                window.location.reload(); // Reload the page after successful deletion
+                            });
+                        } else {
+                            Swal.fire({
+                                icon: 'error',
+                                title: 'Oops...',
+                                text: data.error_message || 'Something went wrong!'
+                            });
+                        }
+                    },
+                    error: function(xhr, errmsg, err) {
+                        console.error(xhr.responseText);
+                        Swal.fire({
+                            icon: 'error',
+                            title: 'Oops...',
+                            text: 'An error occurred while trying to delete the item.'
+                        });
+                    }
+                });
+            }
+        });
+    });
+    
+
+
+
+
+
+    // document end
+});
+

@@ -1,0 +1,26 @@
+services:
+  booking_sgi:
+    build:
+      context: .
+      dockerfile: Dockerfile
+
+    container_name: booking_sgi
+    restart: unless-stopped
+
+    ports:
+      - "8201:80"
+
+    volumes:
+      - .:/var/www/html
+      - booking_vendor:/var/www/html/vendor
+
+    networks:
+      - mysql_network
+
+volumes:
+  booking_vendor:
+
+networks:
+  mysql_network:
+    external: true
+    name: mysql_mysql_network

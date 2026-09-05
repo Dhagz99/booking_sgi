@@ -1,0 +1,35 @@
+# Git
+.git
+.gitignore
+.gitattributes
+
+# Environment / secrets
+.env
+.env.*
+!.env.example
+
+# Local dependencies
+vendor
+node_modules
+
+# Laravel runtime/generated data
+storage/logs/*
+storage/framework/cache/*
+storage/framework/sessions/*
+storage/framework/views/*
+
+# IDE
+.idea
+.vscode
+
+# OS
+.DS_Store
+Thumbs.db
+
+# Docker Compose isn't needed inside the image
+docker-compose.yml
+docker-compose.override.yml
+
+# Documentation / miscellaneous
+README.md
+*.log

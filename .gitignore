@@ -1,0 +1,43 @@
+# Laravel environment
+.env
+.env.*
+!.env.example
+
+# PHP dependencies
+/vendor/
+
+# Node dependencies
+/node_modules/
+
+# Laravel generated/runtime files
+/storage/*.key
+/storage/logs/*
+/storage/framework/cache/*
+/storage/framework/sessions/*
+/storage/framework/views/*
+
+# Keep required directories
+!/storage/framework/cache/.gitignore
+!/storage/framework/sessions/.gitignore
+!/storage/framework/views/.gitignore
+
+# Laravel cache
+/bootstrap/cache/*.php
+
+# Testing
+.phpunit.result.cache
+.phpunit.cache
+
+# IDE / Editor
+.idea/
+.vscode/
+
+# OS
+.DS_Store
+Thumbs.db
+
+# Logs
+*.log
+
+# Local Docker overrides
+docker-compose.override.yml

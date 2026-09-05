@@ -1,0 +1,36 @@
+#pagination {
+    display: flex;
+    justify-content: flex-end; /* Center the pagination */
+    margin-top: .6rem;
+    margin-bottom:2rem;
+    margin-right:1rem;
+
+}
+
+#pagination button {
+    background-color: white; /* Default background color for buttons */
+    border: 1px solid #ddd; /* Light gray border */
+    color: #333; /* Text color */
+    padding: 0.5rem 1rem; /* Padding for buttons */
+    margin: 0 0.2rem; /* Margin between buttons */
+    cursor: pointer; /* Pointer cursor for buttons */
+    border-radius: 4px; /* Rounded corners */
+    transition: background-color 0.3s; /* Smooth background transition */
+}
+
+#pagination button:hover {
+    background-color: #f0f0f0; /* Light gray on hover */
+}
+
+#pagination button:disabled {
+    background-color: #e0e0e0; /* Gray for disabled buttons */
+    cursor: not-allowed; /* Not allowed cursor for disabled buttons */
+}
+
+#pagination span {
+    padding: 0.5rem 1rem; /* Padding for active page number */
+    background-color: #12813b; /* Background color for active page */
+    color: white; /* Text color for active page */
+    border-radius: 4px; /* Rounded corners for active page */
+    margin: 0 0.2rem; /* Margin for spacing */
+}
