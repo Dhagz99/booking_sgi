@@ -15,12 +15,15 @@ services:
       - booking_vendor:/var/www/html/vendor
 
     networks:
-      - mysql_network
+      - mysql_database_network
 
 volumes:
   booking_vendor:
 
 networks:
-  mysql_network:
+  mysql_database_network:
     external: true
-    name: mysql_mysql_network
+
+
+
+

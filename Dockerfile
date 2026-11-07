@@ -17,7 +17,7 @@ RUN npm run build
 # =========================
 # 2. PHP / LARAVEL STAGE
 # =========================
-FROM php:8.3-apache
+FROM php:8.4-apache
 
 RUN apt-get update && apt-get install -y \
     git \
@@ -58,6 +58,8 @@ COPY --from=frontend /app/public/build /var/www/html/public/build
 RUN chown -R www-data:www-data \
     /var/www/html/storage \
     /var/www/html/bootstrap/cache
+
+RUN echo "ServerName localhost" >> /etc/apache2/apache2.conf
 
 RUN chmod -R 775 \
     /var/www/html/storage \
